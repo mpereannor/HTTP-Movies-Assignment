@@ -1,34 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import axiosWithAuth from '../axios/index'
+import React, {useState, useEffect } from 'react';
+import withAuth from '../axios';
 
+// const movieTitleRef = useRef();
 const UpdateMovie = props => { 
+    const [movies, setMovies] = useState([]);
+    const [selectedId, setSelectedId] = useState(null);
+
+    const getAllMovies = () => {
+      
+        withAuth().get(`https://localhost:5000/api/movies`)
+          .then(res => {
+            setMovies(res.data);
+          })
+          .catch(err => {
+            alert(err);
+          });
+      };
+
 
     const selectedMovieCard  = () => {
         const card = movies.find(movie=> movie.id === selectedId);
 
-        return card
+        return card;
     } 
 
-    
     const update = ({id, title, director, metascore}) => {
-        axiosWithAuth()
+        withAuth()
         .put(`http://localhost:5000/api/movies/${id}`, {
             title, director, metascore
         })
-        .then(())
+        .then(() => {
+            getAllMovies();
+            setSelectedId(null);
+            props.history.push('/movie');
+          })
+          .catch(err => {
+    
+          });
         
-    }
-   
+    }   
 
     return (
-        <div>
+    <div>
+      {
+        movies.map(movie => (
+          <li key={movie.id}>
+            <div>
+                <p>
+            {movie.title} 
+
+                </p>
+                <p>
+                    
+            {movie.director}
+                </p>
+                <p>
+                    
+            {movie.metascore} 
+                </p>    
+            </div>
+            <button onClick={() => selectedMovieCard(movie.id)}>Update</button>
+          </li>
+        ))
+      }
             <form>
             <div>
-                <h3>Update Movie</h3>
+                {/* <h3>Update Movie</h3>
                 Title
-                <input ref={usernameRef}
-                type="text" placeholder="enter your username" />
-                <br/>
+                <input ref={movieTitleRef}
+                type="text" placeholder="enter your favourite movie " /> */}
+                {/* <br/>
                 Director
                 <input type="password" ref={passwordRef} placeholder="enter password" />
                 MetaScore
@@ -36,24 +77,17 @@ const UpdateMovie = props => {
                 <br/>
                 Stars
                 <input type="password" ref={passwordRef} placeholder="enter password" />
-                <br/>
-                <button onClick={submit}>Submit</button>
+                <br/> */}
+                {/* <button onClick={submit}>Submit</button> */}
             </div>
         </form>   
-        </div>
+    </div>
         
 
 
 
-{/* 
-         <Field name='text' />
-         <ErrorMessage name='text' component='span' />
 
-         <Field name='author' />
-         <ErrorMessage name='author' component='span' />
-
-         <input type='submit' />
-       </Form> */}
+         
     )
 }
 
