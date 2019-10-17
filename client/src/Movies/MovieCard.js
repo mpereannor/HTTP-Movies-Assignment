@@ -3,7 +3,11 @@ import React from 'react';
 const MovieCard = props => {
   const { title, director, metascore, stars } = props.movie;
   return (
+
     <div className="movie-card">
+       {/* <Route path="/movies/:id" component={UpdatedMovie}
+    />
+    Temi Suggests */}
       <h2>{title}</h2>
       <div className="movie-director">
         Director: <em>{director}</em>
